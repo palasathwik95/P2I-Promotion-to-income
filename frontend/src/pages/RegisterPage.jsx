@@ -22,6 +22,12 @@ export default function RegisterPage() {
     const [equipment, setEquipment] = useState('');
     const [hourlyRate, setHourlyRate] = useState('');
 
+    // Business client fields
+    const [companyName, setCompanyName] = useState('');
+    const [companyWebsite, setCompanyWebsite] = useState('');
+    const [addressField, setAddressField] = useState('');
+    const [contactPerson, setContactPerson] = useState('');
+
     const [errorHeader, setErrorHeader] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
@@ -46,6 +52,13 @@ export default function RegisterPage() {
             body.bio = bio;
             body.equipment = equipment;
             body.hourlyRate = parseFloat(hourlyRate) || 0.0;
+        }
+
+        if (role === 'CUSTOMER') {
+            body.companyName = companyName;
+            body.companyWebsite = companyWebsite;
+            body.address = addressField;
+            body.contactPerson = contactPerson;
         }
 
         setLoading(true);
@@ -169,6 +182,53 @@ export default function RegisterPage() {
                     </div>
 
                     {/* Creator Profile fields */}
+                    {role === 'CUSTOMER' && (
+                        <div className="border-t border-white/5 pt-5 space-y-4">
+                            <h3 className="text-sm font-bold text-purple-400">Business Client Details</h3>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-semibold uppercase text-gray-400 mb-2">Company Name</label>
+                                    <input
+                                        type="text"
+                                        value={companyName} onChange={(e) => setCompanyName(e.target.value)}
+                                        placeholder="Acme Corp"
+                                        className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-4 pr-4 text-xs text-white placeholder-gray-600 focus:border-purple-500 focus:outline-none transition-all"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-semibold uppercase text-gray-400 mb-2">Contact Person</label>
+                                    <input
+                                        type="text"
+                                        value={contactPerson} onChange={(e) => setContactPerson(e.target.value)}
+                                        placeholder="Jane Doe"
+                                        className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-4 pr-4 text-xs text-white placeholder-gray-600 focus:border-purple-500 focus:outline-none transition-all"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-semibold uppercase text-gray-400 mb-2">Company Website</label>
+                                <input
+                                    type="text"
+                                    value={companyWebsite} onChange={(e) => setCompanyWebsite(e.target.value)}
+                                    placeholder="https://acme.example"
+                                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-4 pr-4 text-xs text-white placeholder-gray-600 focus:border-purple-500 focus:outline-none transition-all"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-semibold uppercase text-gray-400 mb-2">Company Address</label>
+                                <textarea
+                                    rows="2"
+                                    value={addressField} onChange={(e) => setAddressField(e.target.value)}
+                                    placeholder="Street, City, State, Country"
+                                    className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-xs text-white placeholder-gray-600 focus:border-purple-500 focus:outline-none transition-all"
+                                ></textarea>
+                            </div>
+                        </div>
+                    )}
                     {role === 'CREATOR' && (
                         <div className="border-t border-white/5 pt-5 space-y-4">
                             <h3 className="text-sm font-bold text-purple-400">Creator Professional Dossier</h3>

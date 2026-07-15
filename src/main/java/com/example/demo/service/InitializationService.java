@@ -156,7 +156,7 @@ public class InitializationService {
                 "+919876543210",
                 Role.CREATOR
         );
-        userRepository.save(creator);
+        creator = userRepository.saveAndFlush(creator);
 
         CreatorProfile profile = new CreatorProfile(creator);
         profile.setSpecialization("Photography");

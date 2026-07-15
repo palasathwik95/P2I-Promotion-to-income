@@ -4,9 +4,11 @@ import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.CreatorProfile;
+import com.example.demo.model.BusinessClient;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repository.CreatorProfileRepository;
+import com.example.demo.repository.BusinessClientRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtUtils;
 import com.example.demo.security.UserDetailsImpl;
@@ -30,6 +32,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final CreatorProfileRepository creatorProfileRepository;
+    private final BusinessClientRepository businessClientRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
 
@@ -37,12 +40,14 @@ public class AuthController {
             AuthenticationManager authenticationManager,
             UserRepository userRepository,
             CreatorProfileRepository creatorProfileRepository,
+            BusinessClientRepository businessClientRepository,
             PasswordEncoder passwordEncoder,
             JwtUtils jwtUtils
     ) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.creatorProfileRepository = creatorProfileRepository;
+        this.businessClientRepository = businessClientRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
     }
@@ -86,6 +91,17 @@ public class AuthController {
             profile.setHourlyRate(request.getHourlyRate() != null ? request.getHourlyRate() : 0.0);
             profile.setApproved(false); // Awaiting admin approval
             creatorProfileRepository.save(profile);
+        }
+
+        if (userRole == Role.CUSTOMER) {
+            // Ensure ID generated
+            User flushed = userRepository.saveAndFlush(savedUser);
+            BusinessClient bc = new com.example.demo.model.BusinessClient(flushed);
+            bc.setCompanyName(request.getCompanyName());
+            bc.setCompanyWebsite(request.getCompanyWebsite());
+            bc.setAddress(request.getAddress());
+            bc.setContactPerson(request.getContactPerson());
+            businessClientRepository.save(bc);
         }
 
         return ResponseEntity.ok(Map.of("message", "User registered successfully.", "role", userRole));

@@ -32,6 +32,12 @@ public class RegisterRequest {
     private String bio;
     private Double hourlyRate = 0.0;
 
+    // Business Client fields (Optional, used when role is CUSTOMER)
+    private String companyName;
+    private String companyWebsite;
+    private String address;
+    private String contactPerson;
+
     public RegisterRequest() {}
 
     // Getters and Setters
@@ -137,5 +143,37 @@ public class RegisterRequest {
 
     public void setHourlyRate(Double hourlyRate) {
         this.hourlyRate = hourlyRate;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyWebsite() {
+        return companyWebsite;
+    }
+
+    public void setCompanyWebsite(String companyWebsite) {
+        this.companyWebsite = companyWebsite;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getContactPerson() {
+        return contactPerson;
+    }
+
+    public void setContactPerson(String contactPerson) {
+        this.contactPerson = contactPerson;
     }
 }
