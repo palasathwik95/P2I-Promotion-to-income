@@ -6,6 +6,7 @@ import com.example.demo.repository.BookingRepository;
 import com.example.demo.repository.CreatorProfileRepository;
 import com.example.demo.repository.ServicePackageRepository;
 import com.example.demo.repository.UserRepository;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -218,9 +219,9 @@ public class BookingService {
 
         // Update creator completed project stats
         if (booking.getCreator() != null) {
-            CreatorProfile profile = creatorProfileRepository.findById(booking.getCreator().getId())
-                    .orElse(null);
-            if (profile != null) {
+            Optional<CreatorProfile> profileOptional = creatorProfileRepository.findByUserId(booking.getCreator().getId());
+            if (profileOptional.isPresent()) {
+                CreatorProfile profile = profileOptional.get();
                 profile.setCompletedProjects(profile.getCompletedProjects() + 1);
                 creatorProfileRepository.save(profile);
             }

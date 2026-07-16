@@ -7,10 +7,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CreatorProfileRepository extends JpaRepository<CreatorProfile, Long> {
     List<CreatorProfile> findByIsApproved(boolean isApproved);
+    Optional<CreatorProfile> findByUserId(Long userId);
     
     @Query("SELECT cp FROM CreatorProfile cp WHERE cp.isApproved = true AND " +
            "(LOWER(cp.user.name) LIKE LOWER(CONCAT('%', :search, '%')) OR " +

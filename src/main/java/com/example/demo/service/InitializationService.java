@@ -158,7 +158,8 @@ public class InitializationService {
         );
         creator = userRepository.saveAndFlush(creator);
 
-        CreatorProfile profile = new CreatorProfile(creator);
+        CreatorProfile profile = new CreatorProfile();
+        profile.setUser(creator);
         profile.setSpecialization("Photography");
         profile.setExperience("5 Years");
         profile.setSkills("Adobe Premiere Pro, Lightroom, Studio Lighting, Color Grading");
@@ -171,6 +172,6 @@ public class InitializationService {
         profile.setRating(4.9);
         profile.setCompletedProjects(12);
 
-        creatorProfileRepository.save(profile);
+        creatorProfileRepository.saveAndFlush(profile);
     }
 }

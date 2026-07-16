@@ -7,8 +7,8 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Set default baseURL for api requests
-    axios.defaults.baseURL = 'http://localhost:8080';
+    // Use the Vite dev-server proxy so browser requests route to the backend correctly.
+    axios.defaults.baseURL = '';
 
     // Restore session on startup
     useEffect(() => {

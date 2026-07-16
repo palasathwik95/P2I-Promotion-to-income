@@ -14,6 +14,7 @@ import com.example.demo.security.JwtUtils;
 import com.example.demo.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import java.util.Optional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -119,9 +120,9 @@ public class AuthController {
 
         boolean isApproved = true;
         if (user.getRole() == Role.CREATOR) {
-            CreatorProfile cp = creatorProfileRepository.findById(user.getId()).orElse(null);
-            if (cp != null) {
-                isApproved = cp.isApproved();
+            Optional<CreatorProfile> cpOptional = creatorProfileRepository.findByUserId(user.getId());
+            if (cpOptional.isPresent()) {
+                isApproved = cpOptional.get().isApproved();
             }
         }
 
@@ -151,10 +152,13 @@ public class AuthController {
         response.put("role", user.getRole().name());
 
         if (user.getRole() == Role.CREATOR) {
-            CreatorProfile cp = creatorProfileRepository.findById(user.getId()).orElse(null);
-            if (cp != null) {
+            Optional<CreatorProfile> cpOptional = creatorProfileRepository.findByUserId(user.getId());
+            if (cpOptional.isPresent()) {
+                CreatorProfile cp = cpOptional.get();
                 response.put("creatorProfile", cp);
                 response.put("isApproved", cp.isApproved());
+            } else {
+                response.put("isApproved", false);
             }
         } else {
             response.put("isApproved", true);

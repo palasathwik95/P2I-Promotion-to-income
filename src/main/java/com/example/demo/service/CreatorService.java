@@ -42,6 +42,10 @@ public class CreatorService {
         return creatorProfileRepository.findById(id);
     }
 
+    public Optional<CreatorProfile> getCreatorProfileByUserId(Long userId) {
+        return creatorProfileRepository.findByUserId(userId);
+    }
+
     public List<CreatorProfile> searchCreators(String query) {
         if (query == null || query.trim().isEmpty()) {
             return getApprovedCreators();

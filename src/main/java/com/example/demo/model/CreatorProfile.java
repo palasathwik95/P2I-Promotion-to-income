@@ -9,11 +9,11 @@ import org.springframework.data.domain.Persistable;
 public class CreatorProfile implements Persistable<Long> {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "user_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, unique = true)
     private User user;
 
     private String specialization;
@@ -51,7 +51,6 @@ public class CreatorProfile implements Persistable<Long> {
 
     public CreatorProfile(User user) {
         this.user = user;
-        this.id = user.getId();
     }
 
     // Getters and Setters
@@ -69,7 +68,6 @@ public class CreatorProfile implements Persistable<Long> {
 
     public void setUser(User user) {
         this.user = user;
-        this.id = user.getId();
     }
 
     public String getSpecialization() {

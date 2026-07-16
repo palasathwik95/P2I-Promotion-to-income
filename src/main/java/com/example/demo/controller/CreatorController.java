@@ -61,8 +61,8 @@ public class CreatorController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody ProfileUpdateRequest request
     ) {
-        Long creatorId = userDetails.getUser().getId();
-        
+        Long userId = userDetails.getUser().getId();
+
         // Update user properties if named or phoned
         User user = userDetails.getUser();
         if (request.getName() != null) {
@@ -84,7 +84,9 @@ public class CreatorController {
         cp.setBio(request.getBio());
         cp.setHourlyRate(request.getHourlyRate());
 
-        CreatorProfile updated = creatorService.updateProfile(creatorId, cp);
+        CreatorProfile existingProfile = creatorService.getCreatorProfileByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Creator profile not found"));
+        CreatorProfile updated = creatorService.updateProfile(existingProfile.getId(), cp);
         return ResponseEntity.ok(Map.of("message", "Profile updated successfully.", "profile", updated));
     }
 
