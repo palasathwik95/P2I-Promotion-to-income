@@ -2,9 +2,11 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
+import org.springframework.data.domain.Persistable;
+
 @Entity
 @Table(name = "creator_profiles")
-public class CreatorProfile {
+public class CreatorProfile implements Persistable<Long> {
 
     @Id
     private Long id;
@@ -30,6 +32,20 @@ public class CreatorProfile {
     private Double hourlyRate = 0.0;
     private Double rating = 5.0;
     private Integer completedProjects = 0;
+
+    @Transient
+    private boolean isNewEntity = true;
+
+    @Override
+    public boolean isNew() {
+        return isNewEntity;
+    }
+
+    @PostPersist
+    @PostLoad
+    public void markNotNew() {
+        this.isNewEntity = false;
+    }
 
     public CreatorProfile() {}
 

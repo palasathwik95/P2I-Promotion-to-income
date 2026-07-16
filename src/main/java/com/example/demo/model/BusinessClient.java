@@ -2,9 +2,11 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
+import org.springframework.data.domain.Persistable;
+
 @Entity
 @Table(name = "business_clients")
-public class BusinessClient {
+public class BusinessClient implements Persistable<Long> {
 
     @Id
     private Long id;
@@ -18,6 +20,20 @@ public class BusinessClient {
     private String companyWebsite;
     private String address;
     private String contactPerson;
+
+    @Transient
+    private boolean isNewEntity = true;
+
+    @Override
+    public boolean isNew() {
+        return isNewEntity;
+    }
+
+    @PostPersist
+    @PostLoad
+    public void markNotNew() {
+        this.isNewEntity = false;
+    }
 
     public BusinessClient() {}
 
